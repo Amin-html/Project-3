@@ -1,0 +1,39 @@
+{% extends 'products/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<a href="/products/" style="color:#1a1a2e; text-decoration:none;">← Все товары</a>
+<br><br>
+<div style="background:white; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:grid; grid-template-columns:1fr 1fr; max-width:900px;">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" style="width:100%; height:400px; object-fit:cover;">
+    {% else %}
+        <div style="height:400px; background:#e0e0e0; display:flex; align-items:center; justify-content:center; font-size:80px;">💻</div>
+    {% endif %}
+    <div style="padding:30px;">
+        <p style="color:#888; font-size:13px;">{{ product.category.name }}</p>
+        <h1 style="font-size:22px; margin:10px 0;">{{ product.name }}</h1>
+        <p style="color:#555; margin-bottom:20px; line-height:1.6;">{{ product.description }}</p>
+        <p style="font-size:32px; font-weight:bold; color:#1a1a2e; margin-bottom:20px;">{{ product.price }} сом</p>
+        {% if product.stock > 0 %}
+            <p style="color:#4ade80; margin-bottom:20px;">✓ В наличии ({{ product.stock }} шт)</p>
+            <form method="POST" action="/cart/add/{{ product.pk }}/">
+                {% csrf_token %}
+                <button type="submit" style="
+                    width:100%;
+                    padding:14px;
+                    background:#1a1a2e;
+                    color:white;
+                    border:none;
+                    border-radius:8px;
+                    font-size:16px;
+                    cursor:pointer;
+                ">🛒 Добавить в корзину</button>
+            </form>
+        {% else %}
+            <p style="color:#e74c3c; font-size:18px;">✗ Нет в наличии</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

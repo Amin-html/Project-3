@@ -22,5 +22,9 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('/', lambda request: redirect('products'))
-]
+    path('', lambda request: redirect('product_list')),
+    path('products/', include('products.urls')),
+    # path('cart/', include('cart.urls')),
+    # path('orders/', include('orders.urls')),
+    # path('accounts/', include('accounts.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
