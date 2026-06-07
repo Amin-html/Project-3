@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from products.models import Product
 
 class Order(models.Model):
@@ -8,7 +9,7 @@ class Order(models.Model):
         ('completed', 'Выполнен'),
         ('cancelled', 'Отменён'),
     ]
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=25, choices=STATUS_CHOICES, default='pending')
     total_price = models.IntegerField(default=0)
