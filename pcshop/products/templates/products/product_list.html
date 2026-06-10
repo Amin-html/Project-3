@@ -5,16 +5,51 @@
 {% block content %}
 <h1 style="margin-bottom:20px;">💻 Магазин ПК</h1>
 
+<!-- Форма поиска (Добавлено!) -->
+<form method="get" action="" style="margin-bottom: 25px; display: flex; gap: 10px;">
+    <!-- Передаём категорию скрытым полем, чтобы поиск искал внутри текущей категории -->
+    {% if current_category %}
+        <input type="hidden" name="category" value="{{ current_category.slug }}">
+    {% endif %}
+    <input type="text" name="q" value="{{ query }}" placeholder="Поиск товаров..." style="
+        padding: 8px 15px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        flex-grow: 1;
+        outline: none;
+    ">
+    <button type="submit" style="
+        padding: 8px 20px;
+        background: #1a1a2e;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+    ">Найти</button>
+    {% if query %}
+        <a href="?{% if current_category %}category={{ current_category.slug }}{% endif %}" style="
+            padding: 8px 15px;
+            background: #e0e0e0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 20px;
+        ">Сбросить</a>
+    {% endif %}
+</form>
+
 <!-- Фильтр по категориям -->
 <div style="margin-bottom:25px; display:flex; gap:10px; flex-wrap:wrap;">
-    <a href="/products/" style="
+    <!-- При сбросе категории сохраняем поисковый запрос q -->
+    <a href="?{% if query %}q={{ query }}{% endif %}" style="
         padding: 8px 16px;
         border-radius: 20px;
         text-decoration: none;
         {% if not current_category %}background:#1a1a2e; color:white;{% else %}background:#e0e0e0; color:#333;{% endif %}
     ">Все</a>
+
     {% for cat in categories %}
-    <a href="?category={{ cat.slug }}" style="
+    <!-- При переходе по категориям сохраняем поисковый запрос q -->
+    <a href="?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}" style="
         padding: 8px 16px;
         border-radius: 20px;
         text-decoration: none;
@@ -47,6 +82,8 @@
             </div>
         </div>
     </a>
+    {% empty %}
+        <p style="grid-column: span 3; text-align: center; color: #888; margin-top: 20px;">Товары не найдены.</p>
     {% endfor %}
 </div>
 {% endblock %}
